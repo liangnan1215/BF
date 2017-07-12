@@ -1,18 +1,15 @@
 package ui;
 
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 import java.rmi.RemoteException;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
+
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -82,7 +79,7 @@ public class Login  extends JFrame{
         loginFrame.setSize(300,200);
         loginFrame.setTitle("login");
 		loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        loginFrame.setFont(new Font("Dialog",Font.BOLD,30));
+        loginFrame.setFont(new Font("TimesRoman",Font.BOLD,30));
         loginFrame.setVisible(true);
         GridLayout gridLayout=new GridLayout(3,2);
         gridLayout.setHgap(30);

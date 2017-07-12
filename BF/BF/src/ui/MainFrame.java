@@ -2,8 +2,11 @@ package ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Insets;
+import java.awt.Robot;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -47,6 +50,8 @@ public class MainFrame extends JFrame {
 	private JTextArea resultTextArea;
 	private JLabel accountLabel;
 	private JMenu historyMenu;
+	private JMenuItem undoMenuItem;
+	private JMenuItem redoMenuItem;
 	private Date d;
 	public RemoteHelper remoteHelper=RemoteHelper.getInstance();
 	
@@ -88,9 +93,9 @@ public class MainFrame extends JFrame {
 		//第三栏  重做撤销
 		JMenu editMenu=new JMenu("Edit");
 		menuBar.add(editMenu);
-		JMenuItem undoMenuItem=new JMenuItem("Undo");
+		 undoMenuItem=new JMenuItem("Undo");
 		editMenu.add(undoMenuItem);
-		JMenuItem redoMenuItem=new JMenuItem("Redo");
+		 redoMenuItem=new JMenuItem("Redo");
 		editMenu.add(redoMenuItem);
 		//第四栏 历史版本
 		historyMenu=new JMenu("Version");
@@ -160,31 +165,16 @@ public class MainFrame extends JFrame {
 		
 		
 		textArea.addKeyListener(new unredoKeyListener());
-//		textArea.addKeyListener(new KeyListener() {
-//			@Override
-//			public void keyTyped(KeyEvent e) {
-//			}
-//
-//			@Override
-//			public void keyPressed(KeyEvent e) {
-//
-//
-//					if (e.getKeyCode() == KeyEvent.VK_F1) {
-//						//undoCode();
-//					} else if (e.getKeyCode() == KeyEvent.VK_F2) {
-//						//redoCode();
-//					}
-//
-//			}
-//			@Override
-//			public void keyReleased(KeyEvent e) {
-//			}
-//		});
-		
+
+		undoMenuItem.setEnabled(false);
+		redoMenuItem.setEnabled(false);
+		undoredoArrayList.add("");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(1024, 720);
-		frame.setLocation(0, 0);
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();  
+		frame.setLocation((dim.width - frame.getWidth()) / 2, (dim.height - frame.getHeight()) / 2);  
 		frame.setVisible(true);
+		frame.setResizable(false);
 
 	}
 
@@ -207,7 +197,6 @@ public class MainFrame extends JFrame {
 			
 			inputTextArea.setText("input");
 			resultTextArea.setText("");
-			accoutUnLogin();
 			textArea.setText("");
 		}
 
@@ -216,6 +205,7 @@ public class MainFrame extends JFrame {
 	class OpenActionListener implements ActionListener {
 
 		@Override
+		
 		public void actionPerformed(ActionEvent e) {
 			if(remoteHelper.isLogin()==false)
 				setMessage("please login first");
@@ -326,30 +316,89 @@ public class MainFrame extends JFrame {
 
 	class unredoKeyListener implements KeyListener{
 
-		
-
+	
 		@Override
 		public void keyPressed(KeyEvent e) {
 			// TODO 自动生成的方法存根
-			if ( e.getKeyCode()==KeyEvent.VK_F1)
-	            undoCode();
-	        else if (e.getKeyCode()==KeyEvent.VK_F2)
-	            redoCode();
-	       
 			
+//			if ( e.getKeyCode()==KeyEvent.VK_F1)
+//	            undoCode();
+//	        else if (e.getKeyCode()==KeyEvent.VK_F2)
+//	            redoCode();	
+	        if(e.getKeyCode()==KeyEvent.VK_F3){
+	        	if(remoteHelper.isLogin()==false)
+					setMessage("please login first");
+				else{
+					new FileFrame(MainFrame.this);
+				}
+	        }
+	        else if(e.getKeyCode()==KeyEvent.VK_F4){
+	        	boolean judge=remoteHelper.isLogin();
+				if(judge)
+					new SaveFrame(MainFrame.this);
+				else
+					setMessage("you do not login");
+	        }
+	        else if(e.getKeyCode()==KeyEvent.VK_F5){
+	        	ExecuteService executeService=remoteHelper.getExecuteService();
+				String code=textArea.getText();
+				String param=inputTextArea.getText();
+				if(remoteHelper.isLogin()==false)
+					setMessage("请先登录");			
+				else if(remoteHelper.getCurrentFile().equals(""))
+					setMessage("请先创建文件");
+				else{
+					try {	
+						String result=executeService.execute(code,param);
+						resultTextArea.setText(result);
+						resultTextArea.repaint();
+						d=new Date();
+						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+						String dateNowStr = sdf.format(d);
+						try {
+							if(remoteHelper.isLogin()){
+									RemoteHelper.getInstance().getIOService().writeFile(code, remoteHelper.getUsername(), remoteHelper.getCurrentFile());
+									addHistory(dateNowStr);
+							}
+						} catch (RemoteException e1) {
+							e1.printStackTrace();
+						}
+					} catch (RemoteException e1) {
+						e1.printStackTrace();
+					}
+				}
+	        }
+	        	
 		}
 
 		@Override
 		public void keyReleased(KeyEvent arg0) {
-			String undodo=getCodeText();
-			if(undoredoArrayList.contains(undodo)){
-				;
+			
+			
+			if(Pointer!=undoredoArrayList.size()-1){
+				int i=undoredoArrayList.size();
+				System.out.println("123"+i);
+				System.out.println(Pointer);
+				for(int j=0;j<i-Pointer-1;j++ ){
+					System.out.println(Pointer+j+1);
+					undoredoArrayList.remove(i-1-j);
+				}
 			}
-			else{
-				Pointer++;
-				undoredoArrayList.add(getCodeText());
+			undoredoArrayList.add(getCodeText());
+			Pointer++;
+			
+			if(Pointer==undoredoArrayList.size()-1)
+				redoMenuItem.setEnabled(false);
+			else
+				redoMenuItem.setEnabled(true);
+			if(Pointer==0){
+				undoMenuItem.setEnabled(false);
 			}
-		  
+			else
+				undoMenuItem.setEnabled(true);	
+			
+			
+						  
 		}
 
 		@Override
@@ -364,6 +413,16 @@ public class MainFrame extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			redoCode();
+			System.out.println(undoredoArrayList.size());
+			if(Pointer==undoredoArrayList.size()-1)
+				redoMenuItem.setEnabled(false);
+			else
+				redoMenuItem.setEnabled(true);
+			if(Pointer==0){
+				undoMenuItem.setEnabled(false);
+			}
+			else
+				undoMenuItem.setEnabled(true);	
 		}
 	}
 	
@@ -372,6 +431,15 @@ public class MainFrame extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			undoCode();
+			if(Pointer==undoredoArrayList.size()-1)
+				redoMenuItem.setEnabled(false);
+			else
+				redoMenuItem.setEnabled(true);
+			if(Pointer==0){
+				undoMenuItem.setEnabled(false);
+			}
+			else
+				undoMenuItem.setEnabled(true);	
 		}
 	}
 	
@@ -426,7 +494,7 @@ public class MainFrame extends JFrame {
 		else{
 			int leng=pastCodeArrayList.size();
 			for(int i=0;i<leng-3;i++)
-				pastCodeArrayList.remove(i);
+				pastCodeArrayList.remove(0);
 			for(int i =0;i<pastCodeArrayList.size();i++){
 				JMenuItem historyCodeMenuItem=new JMenuItem(pastCodeArrayList.get(i).split("_")[0]);
 				historyMenu.add(historyCodeMenuItem);
@@ -449,15 +517,15 @@ public class MainFrame extends JFrame {
 		System.out.println(Pointer);
 		if(Pointer>0) {
 			Pointer--;
-			setCodeText(undoredoArrayList.get(Pointer));
+			setCodeText(undoredoArrayList.get(Pointer));			
 		}
 	}
 
 	public void redoCode(){
 		System.out.println(Pointer);
-		if(Pointer<(undoredoArrayList.size()-1)) {
-			Pointer++;
-			setCodeText(undoredoArrayList.get(Pointer));
+		if(Pointer<undoredoArrayList.size()-1) {
+			Pointer++;	
+			setCodeText(undoredoArrayList.get(Pointer));					
 		}
 	}
 	

@@ -23,15 +23,14 @@ public class SaveFrame extends JFrame{
 	    private JComboBox filebox;
 	    public SaveFrame(MainFrame mainFrame){
 	        filenameField=new JTextField();
-	        promptLabel=new JLabel("please enter filename" +"\n"+
-	                "(if the filename is existed,the file will be cover)");
+	        promptLabel=new JLabel("请输入文件名" +"\n"+"(重名将被覆盖)");
 	        saveButton=new JButton("save");
 	        fileLabel=new JLabel("文件类型");
 	        String []choseList=new String[]{"bf","ook"};
 	        filebox=new JComboBox(choseList);        
-	        filenameField.setFont(new Font("Lato",1,40));
-	        promptLabel.setFont(new Font("Lato",1,20));
-	        saveButton.setFont(new Font("Lato",1,40));
+	        filenameField.setFont(new Font("TimesRoman",1,40));
+	        promptLabel.setFont(new Font("TimesRoman",1,20));
+	        saveButton.setFont(new Font("TimesRoman",1,40));
 	        setVisible(true);
 	        setBounds(700,400,650,300);
 	        setLayout(new GridLayout(5,1));
@@ -43,8 +42,8 @@ public class SaveFrame extends JFrame{
 	        	else
 	        		  mainFrame.remoteHelper.setCurrentFile(filenameField.getText()+".ook");	          
 	            IOService ioService=mainFrame.remoteHelper.getIOService();
-	            try {
-	            	
+	     
+	            try { 	
 	            		ioService.writeFile(mainFrame.getCodeText(),mainFrame.remoteHelper.getUsername(),mainFrame.remoteHelper.getCurrentFile());
 	            		setMessage("Save Success");         	
 	            } catch (RemoteException e1) {

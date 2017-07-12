@@ -25,8 +25,15 @@ public class UserServiceImpl implements UserService{
 		User user=new User();
 		user.setUsername(username);
 		user.setPassword(password);
-		String filePath = "C:\\Users\\liangnan\\Desktop\\学习作业\\大一下\\软工1\\大作业\\BFServer\\user_password.txt";
-		File file=new File(filePath);
+		File directory=new File("");
+		String filePath = null;
+		try {
+			filePath = directory.getCanonicalPath();
+		} catch (IOException e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		}
+		File file=new File(filePath+"\\user_password.txt");
 		try {
 			BufferedReader br=new BufferedReader(new FileReader(file));
 			String usernamepass;			
@@ -62,8 +69,15 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public boolean register(String username, String password) throws RemoteException {
 		// TODO 自动生成的方法存根
-		String filePath = "C:\\Users\\liangnan\\Desktop\\学习作业\\大一下\\软工1\\大作业\\BFServer\\user_password.txt";
-		File file=new File(filePath);
+		File directory=new File("");
+		String filePath = null;
+		try {
+			filePath = directory.getCanonicalPath();
+		} catch (IOException e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		}
+		File file=new File(filePath+"\\user_password.txt");
 		try {
 			FileWriter fos = new FileWriter(file, true);
 			BufferedReader br=new BufferedReader(new FileReader(file));

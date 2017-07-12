@@ -6,9 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.rmi.RemoteException;
 
-/**
- * Created by sarleon on 16-5-7.
- */
+
 public class FileFrame extends JFrame{
     private JComboBox<String> fileComboBox;
     private JButton confirmButton;
@@ -34,7 +32,7 @@ public class FileFrame extends JFrame{
         confirmButton.addActionListener(e -> {
             try {
                 String filename=(String)fileComboBox.getSelectedItem();
-                mainFrame.remoteHelper.setCurrentFile(filename);
+                mainFrame.remoteHelper.setCurrentFile(filename.split("_")[1]);
                 String codeText=ioService.readFile(mainFrame.remoteHelper.getUsername(),filename);
                 mainFrame.setCodeText(codeText);
             } catch (RemoteException e1) {
@@ -49,19 +47,27 @@ public class FileFrame extends JFrame{
             dispose();
         });
 
-        setLayout(null);
-        fileComboBox.setFont(new Font("Lato",1,25));
-        confirmButton.setFont(new Font("Lato",1,20));
-        cancelButton.setFont(new Font("Lato",1,20));
-        fileComboBox.setBounds(40,30,300,40);
-        confirmButton.setBounds(30,100,120,30);
-        cancelButton.setBounds(210,100,120,30);
-        add(confirmButton);
-        add(cancelButton);
+        fileComboBox.setFont(new Font("TimesRoman",1,25));
+        confirmButton.setFont(new Font("TimesRoman",1,20));
+        cancelButton.setFont(new Font("TimesRoman",1,20));
+//        fileComboBox.setBounds(0,0,100,200);
+//        confirmButton.setBounds(210,200,30,30);
+//        cancelButton.setBounds(210,200,30,30);
+        confirmButton.setSize(5, 5);
+	    cancelButton.setSize(5,5);
         add(fileComboBox);
+        add(confirmButton);
+        add(cancelButton); 
+        setLocation(800,400);
+        setSize(600,200);
+        
+        GridLayout gridLayout=new GridLayout(3,1);
+        gridLayout.setHgap(30);
+        gridLayout.setVgap(30);
+        setLayout(gridLayout);
         setVisible(true);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setBounds(800,400,400,240);
+        
 
 
     }

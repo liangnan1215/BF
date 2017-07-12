@@ -8,8 +8,8 @@ import service.UserService;
 
 public class RemoteHelper {
 	private Remote remote;
-	private String username="asd";
-	private String password="12345";
+	private String username="";
+	private String password="";
 	private String currentFile="";
 	private boolean isLogin=false;
 	

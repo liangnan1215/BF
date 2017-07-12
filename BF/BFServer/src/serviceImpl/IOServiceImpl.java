@@ -28,8 +28,9 @@ public class IOServiceImpl implements IOService{
 
 	@Override
 	public String readFile(String userId, String fileName) {
-		String filePath = "C:\\Users\\liangnan\\Desktop\\学习作业\\大一下\\软工1\\大作业\\BFServer\\"+fileName;
-		File file=new File(filePath);
+//		String filePath = "C:\\Users\\liangnan\\Desktop\\学习作业\\大一下\\软工1\\大作业\\BFServer\\"+fileName;
+//		File file=new File(filePath);
+		File file = new File(fileName);
 		String result="";
 		try {
 			FileReader fr=new FileReader(file);
@@ -55,14 +56,19 @@ public class IOServiceImpl implements IOService{
 	@Override
 	public String[] readFileList(String userId) {
 		
-		String filePath = "C:\\Users\\liangnan\\Desktop\\学习作业\\大一下\\软工1\\大作业\\BFServer";
+		File directory=new File("");
+		String filePath = null;
+		try {
+			filePath = directory.getCanonicalPath();
+		} catch (IOException e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		}
 		File file=new File(filePath);
 		File[] list=file.listFiles();        /* 此处获取文件夹下的所有文件 */
 		String[] fileList=new String[list.length];
 		for(int i=0;i<list.length;i++)
-			fileList[i]=list[i].getName();
-		
-		
+			fileList[i]=list[i].getName();	
 		return fileList;
 		// TODO Auto-generated method stub
 		

@@ -18,7 +18,6 @@ public class ExecuteServiceImpl implements ExecuteService {
 	public String execute(String code, String param) throws RemoteException {
 		// TODO Auto-generated method stub
 		int loopcount=0;
-		int looppointer=0;
 		int pointer=0;
 		int []store=new int [100];
 		String result="";
@@ -36,12 +35,12 @@ public class ExecuteServiceImpl implements ExecuteService {
 		        loopcount--;
 		    }
 		    if(loopcount<0){
-		         return "ERROR:Invalid code,bracket not match";
+		         return "ERROR";
 		    }
 
 		}
 		if(loopcount!=0){
-		     return "ERROR:Invalid code,bracket not match";
+		     return "ERROR";
 
 		}
 		loopcount=0;

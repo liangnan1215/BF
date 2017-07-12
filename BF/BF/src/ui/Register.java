@@ -68,14 +68,14 @@ public class Register extends JFrame {
             
         });
 
-        cancelButton.setFont(new Font("Dialog",1,20));
-        loginButton.setFont(new Font("Dialog",1,20));
-        usernameLabel.setFont(new Font("Dialog",1,20));
-        passwordLabel.setFont(new Font("Dialog",1,20));
-        passwordLabel1.setFont(new Font("Dialog",1,20));
-        usernameInput.setFont(new Font("Dialog",1,20));
-        passwordInput.setFont(new Font("Dialog",1,20));
-        passwordInput1.setFont(new Font("Dialog",1,20));
+        cancelButton.setFont(new Font("TimesRoman",1,20));
+        loginButton.setFont(new Font("TimesRoman",1,20));
+        usernameLabel.setFont(new Font("TimesRoman",1,20));
+        passwordLabel.setFont(new Font("TimesRoman",1,20));
+        passwordLabel1.setFont(new Font("TimesRoman",1,20));
+        usernameInput.setFont(new Font("TimesRoman",1,20));
+        passwordInput.setFont(new Font("TimesRoman",1,20));
+        passwordInput1.setFont(new Font("TimesRoman",1,20));
         
         add(usernameLabel);
         add(usernameInput);
@@ -89,7 +89,7 @@ public class Register extends JFrame {
         setSize(400,300);
         setTitle("login");
 
-        setFont(new Font("Dialog",Font.BOLD,30));
+        setFont(new Font("TimesRoman",Font.BOLD,30));
         setVisible(true);
         GridLayout gridLayout=new GridLayout(4,2);
         gridLayout.setHgap(40);

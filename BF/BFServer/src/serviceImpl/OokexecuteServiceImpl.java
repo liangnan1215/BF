@@ -44,12 +44,12 @@ public class OokexecuteServiceImpl implements ExecuteService {
 		        loopcount--;
 		    }
 		    if(loopcount<0){
-		         return "ERROR:Invalid code,bracket not match";
+		         return "ERROR";
 		    }
 
 		}
 		if(loopcount!=0){
-		     return "ERROR:Invalid code,bracket not match";
+		     return "ERROR";
 
 		}
 		loopcount=0;
